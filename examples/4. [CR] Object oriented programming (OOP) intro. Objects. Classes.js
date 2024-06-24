@@ -167,3 +167,187 @@ console.log(result); // Doe John
 ///ім'я та середнє ім'я з пробілами між ними.Метод getCourse обчислює поточний курс студента, виходячи з поточного року та року вступу.
 
 /////////////////////////### 4 ###///////////////////////
+//Write class Marker that describes a simple marker. The instances of this class should have the following components:
+///Private field that stores the color of the marker and only getter color for this field, we set color by parameter in constructor.
+///Private field that stores the amount of ink in the marker (in percentage), marker creating with 100% of ink and only getter ink for this field.
+///Public method print(text) that call console.log with letters from text one by one, and write in console as long as there is ink in the marker;
+/// one non - whitespace character is 10 % of the ink in the marker.
+//Implement a class that describes a RefillableMarker inherited from a Marker and adding a method refill which add ink to 100%.
+class Marker {
+  #color;
+  #ink;
+
+  constructor(color) {
+    this.#color = color;
+    this.#ink = 100; // Marker starts with 100% ink
+  }
+
+  get color() {
+    return this.#color;
+  }
+
+  get ink() {
+    return this.#ink;
+  }
+
+  print(text) {
+    for (let char of text) {
+      if (this.#ink <= 0) {
+        break;
+      }
+      if (char !== " ") {
+        this.#ink -= 10;
+      }
+      console.log(char);
+    }
+  }
+}
+
+class RefillableMarker extends Marker {
+  #ink;
+
+  constructor(color) {
+    super(color);
+    this.#ink = 100;
+  }
+
+  refill() {
+    this.#ink = 100; // Refill marker to 100% ink
+  }
+
+  get ink() {
+    return this.#ink;
+  }
+
+  print(text) {
+    for (let char of text) {
+      if (this.#ink <= 0) {
+        break;
+      }
+      if (char !== " ") {
+        this.#ink -= 10;
+      }
+      console.log(char);
+    }
+  }
+}
+
+// Приклад тесту
+const marker = new Marker("red");
+marker.print("Hello World!");
+
+const refillableMarker = new RefillableMarker("red");
+refillableMarker.print("Lorem ipsum dolor sit amet");
+refillableMarker.print("Lorem ipsum dolor sit amet");
+refillableMarker.refill();
+refillableMarker.print("Lorem ipsum dolor sit amet");
+
+//У класі RefillableMarker тепер оголошено приватне поле #ink та реалізовано метод print, щоб забезпечити доступ до приватного поля та його зменшення.
+//В конструкторі класу RefillableMarker викликається конструктор батьківського класу Marker за допомогою super(color).
+//Поле #ink у класі RefillableMarker приватне, але отримує доступ за допомогою геттера ink.
+
+//////////////////////////### 5 ###/////////////////////////////////
+//Create class Worker, constructor of it obtain parameters: fullName:string, dayRate:number, workingDays:number, experience save them in private fields.
+//In class define next public methods:
+///getSalary - return worker salary which calculate as dayRate*workingDays
+///getSalaryWithExperience - return worker salary which calculate as dayRate*workingDays*experience
+///getter and setter on fields fullName, dayRate and experience
+///getter on field workingDays and method addWorkingDays(n:number), whick add n to workingDays
+//In class Worker implement method sortBySalary which obtain as parameter array of workers and return new array with workers sorted from lowest to highest salary.
+class Worker {
+  #fullName;
+  #dayRate;
+  #workingDays;
+  #experience;
+
+  constructor(fullName, dayRate, workingDays, experience) {
+    this.#fullName = fullName;
+    this.#dayRate = dayRate;
+    this.#workingDays = workingDays;
+    this.#experience = experience;
+  }
+
+  getSalary() {
+    return this.#dayRate * this.#workingDays;
+  }
+
+  getSalaryWithExperience() {
+    return this.#dayRate * this.#workingDays * this.#experience;
+  }
+
+  get fullName() {
+    return this.#fullName;
+  }
+
+  set fullName(name) {
+    this.#fullName = name;
+  }
+
+  get dayRate() {
+    return this.#dayRate;
+  }
+
+  set dayRate(rate) {
+    this.#dayRate = rate;
+  }
+
+  get workingDays() {
+    return this.#workingDays;
+  }
+
+  addWorkingDays(n) {
+    this.#workingDays += n;
+  }
+
+  get experience() {
+    return this.#experience;
+  }
+
+  set experience(exp) {
+    this.#experience = exp;
+  }
+
+  static sortBySalary(workers) {
+    return workers.slice().sort((a, b) => a.getSalary() - b.getSalary());
+  }
+}
+
+// Приклади використання:
+const worker = new Worker("John Johnson", 20, 23, 1);
+console.log(worker.fullName); // John Johnson
+console.log(worker.getSalary()); // 460
+console.log(worker.getSalaryWithExperience()); // 460
+
+const worker2 = new Worker("Adam Oliver", 100, 1, 2);
+worker2.dayRate = 200;
+worker2.experience = 3;
+worker2.addWorkingDays(29);
+console.log(worker2.getSalary()); // 6000
+console.log(worker2.getSalaryWithExperience()); // 18000
+
+const worker1 = new Worker("David Brown", 450, 20, 1);
+const worker3 = new Worker("John Johnson", 325, 30, 1);
+const arrayOfWorkers = [worker1, worker2, worker3];
+const sortedArrayOfWorkers = Worker.sortBySalary(arrayOfWorkers);
+
+console.log("Before Sorting");
+arrayOfWorkers.forEach((worker) => console.log(worker.fullName));
+// David Brown
+// Adam Oliver
+// John Johnson
+
+console.log("After Sorting");
+sortedArrayOfWorkers.forEach((worker) => console.log(worker.fullName));
+// David Brown
+// John Johnson
+// Adam Oliver
+
+//Пояснення:
+//Приватні поля: Використовуються приватні поля (#fullName, #dayRate, #workingDays, #experience) для зберігання даних робітника.
+//Конструктор: Конструктор приймає параметри fullName, dayRate, workingDays і experience та ініціалізує приватні поля.
+//Методи:
+///getSalary(): Обчислює зарплату як добуток dayRate на workingDays.
+///getSalaryWithExperience(): Обчислює зарплату з урахуванням досвіду як добуток dayRate, workingDays і experience.
+//Геттери та сеттери для полів fullName, dayRate, experience.
+//Геттер для поля workingDays та метод addWorkingDays(n), який додає n до workingDays.
+//Статичний метод sortBySalary(workers), який сортує масив робітників за зарплатою.
