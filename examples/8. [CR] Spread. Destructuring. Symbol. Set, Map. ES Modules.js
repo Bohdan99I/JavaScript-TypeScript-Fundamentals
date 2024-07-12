@@ -101,3 +101,101 @@ console.log(mul(null, "str", false, true)); // 0
 ///Якщо є числа, функція використовує метод reduce(), щоб обчислити їхній добуток. Метод reduce() застосовує
 ///функцію до акумулятора(product) та кожного числа(num), щоб звести масив до одного значення, яке є добутком
 ///чисел.Початкове значення акумулятора встановлено на 1.
+
+//////////////////////### 4 ###////////////////////////////////////
+//Change the code so that bind is not used but functionality will be same.
+
+let server = {
+  data: 0,
+  convertToString: function (callback) {
+    callback(() => this.data + "");
+  },
+};
+
+let client = {
+  server: server,
+  result: "",
+  calc: function (data) {
+    this.server.data = data;
+    this.server.convertToString(this.notification());
+  },
+  notification: function () {
+    return (callback) => {
+      this.result = callback();
+    };
+  },
+};
+
+// Тестовий приклад
+client.calc(123);
+console.log(client.result); // 123
+console.log(typeof client.result); // string
+
+//Пояснення:
+//Стрілкова функція у convertToString:
+///Стрілкова функція () => this.data + "" автоматично зберігає контекст this об'єкта server.
+
+//Стрілкова функція у notification:
+///Використовуючи стрілкову функцію у notification, ми забезпечуємо, що контекст this буде відповідати об'єкту client.
+
+//////////////////////### 5 ###////////////////////////////////////
+//Using the code below, an array is created using a loop, and three functions are written to the array.
+//The logic of the functions is simple, the counter value at the time of creation of the function is output to the console.
+//The code looks logical, but if you run this code without changes, the number 3 will be output to the console in all function calls.
+//Using the closure mechanism, modify the code to output the correct numbers.
+//It is possible solve this problem by replacing var to let, but in this task the keyword let is not allowed.
+
+var arr = [];
+
+for (var i = 0; i <= 2; i++) {
+  (function (j) {
+    arr[j] = function () {
+      console.log(j);
+    };
+  })(i);
+}
+
+// Тестовий приклад
+arr[0](); // 0
+arr[1](); // 1
+arr[2](); // 2
+
+//У цьому коді IIFE створює нову область видимості для кожної ітерації циклу, захоплюючи поточне
+//значення i у змінну j.Це дозволяє кожній функції в масиві arr зберігати правильне значення i під час її створення.
+
+//////////////////////### 6 ###////////////////////////////////////
+//Write funсtion "mapBuilder (keysArray, valuesArrays)", which obtain two arrays of the same length.
+//Using these arrays, the function must create an object of type "Map", the keys of which are the
+//values from the first array, and the Map values are values from the second array.After that, the function returns this Map object.
+
+function mapBuilder(arr1, arr2) {
+  // Перевірка, що обидва масиви мають однакову довжину
+  if (arr1.length !== arr2.length) {
+    throw new Error("Both arrays must have the same length");
+  }
+
+  // Створення нового об'єкта Map
+  let map = new Map();
+
+  // Додавання пар ключ-значення до Map
+  for (let i = 0; i < arr1.length; i++) {
+    map.set(arr1[i], arr2[i]);
+  }
+
+  return map;
+}
+
+// Тестові приклади
+let map1 = mapBuilder([], []);
+console.log(map1 instanceof Map); // true
+
+let map2 = mapBuilder([1, 2, 3, 4], ["div", "span", "b", "i"]);
+console.log(map2.get(2)); // "span"
+
+//У цьому коді:
+///Функція mapBuilder приймає два масиви arr1 і arr2.
+///Перевіряється, що обидва масиви мають однакову довжину. Якщо довжини не співпадають, функція викидає помилку.
+///Створюється новий об'єкт типу Map.
+///Ітерація по елементах обох масивів за допомогою циклу for.
+///Додаються пари ключ-значення до об'єкта Map за допомогою методу set.
+///Повертається заповнений об'єкт Map.
