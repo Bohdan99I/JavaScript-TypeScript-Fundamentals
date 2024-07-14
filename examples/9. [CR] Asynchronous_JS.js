@@ -120,5 +120,65 @@ new Promise(function (resolve, reject) {
 ///-Виводить отримане число в консоль.
 
 //////////////////////### 4 ###////////////////////////////////////
+//We have arrays delays of delays in ms. Show in console numbers from 0 to delays.length-1
+//with corresponding dalay.Use function delay for creating of Promises in your solution
+//For example:
+//Test	let delays = [300, 200, 100, 150, 500]
+//Result   2 3 1 0 4
+
+//const delay = (i, time) =>
+new Promise((resolve) => setTimeout(() => resolve(i), time));
+
+//let delays = [300, 200, 100, 150, 500];
+
+function showNumbersWithDelay(delays) {
+  let promises = delays.map((time, index) => delay(index, time));
+
+  promises.forEach((promise) => {
+    promise.then((result) => console.log(result));
+  });
+}
+
+showNumbersWithDelay(delays);
+
+//Пояснення:
+//1.Функція delay: Приймає індекс i та час затримки time, створює новий проміс, який вирішується після затримки в time мілісекунд і повертає індекс i.
+//2.Масив delays: Містить затримки в мілісекундах.
+//3.Функція showNumbersWithDelay:
+//-Використовує Array.prototype.map для створення масиву промісів, де кожен проміс буде вирішуватись після відповідної затримки.
+//-Використовує Array.prototype.forEach для обробки кожного промісу. Коли проміс вирішується, виводиться його результат в консоль.
+//Цей код виведе індекси масиву delays у порядку, відповідному до часу затримки для кожного індексу.
 
 //////////////////////### 5 ###////////////////////////////////////
+//We have arrays delays of delays in ms. Show in console numbers from 0 to delays.length-1 with corresponding
+//dalay BUT show numbers in correct turn.It means that first you need show 0 after delay delays[0] then
+//show 1 after additional delay delays[1] and so on.Use function delay for creating of Promises in your solution
+//For example:        let delays = [300, 200, 100, 150, 500]
+//Test	Result        0 1 2 3 4
+
+const delay = (i, time) =>
+  new Promise((resolve) => setTimeout(() => resolve(i), time));
+
+let delays = [300, 200, 100, 150, 500];
+
+function showNumbersWithDelay(delays) {
+  let promise = Promise.resolve();
+
+  delays.forEach((time, index) => {
+    promise = promise
+      .then(() => delay(index, time))
+      .then((result) => console.log(result));
+  });
+}
+
+showNumbersWithDelay(delays);
+
+//Пояснення:
+//1.Функція delay: Приймає індекс i та час затримки time, створює новий проміс, який вирішується після затримки в time мілісекунд і повертає індекс i.
+//2.Масив delays: Містить затримки в мілісекундах.
+//3.Функція showNumbersWithDelay:
+//-Створює початковий Promise.resolve(), який використовується для початку ланцюжка промісів.
+//-Використовує Array.prototype.forEach для ітерації по масиву затримок.
+//-Для кожної затримки додається новий проміс у ланцюжок, який викликає функцію delay з відповідним індексом та часом затримки.
+//-Коли проміс вирішується, виводиться його результат в консоль.
+//Цей код забезпечує, що числа будуть виводитися в правильному порядку з відповідною затримкою між кожним числом.
