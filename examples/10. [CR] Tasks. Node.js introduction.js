@@ -64,3 +64,56 @@ server.listen(5000);
 //7.Запуск сервера: Слухаємо порт 5000 на локальній машині, використовуючи server.listen().
 //Цей код створює сервер, який слухає запити на порту 5000 та повертає HTML-сторінку з інформацією
 //про систему, не виводячи повідомлення в консоль, як вимагається.
+
+//////////////////////### 2 ###////////////////////////////////////
+//Create your own personalmodule.js module, which contains the function getMessage(username),
+//which takes the name of the system user and works with the current time and, based on the time
+//of day, returns a message with the user's greeting ('{ greeting }, { username } ').
+//Good morning (05:00-12:00)
+//Good afternoon (12:00-18:00)
+//Good evening (18:00-23:00)
+//Good night (23:00-05:00)
+//To export module variables or functions externally, you can use the module.exports object.
+//Create a Node.js http server that will be listening for requests on port 8000 on the local
+//machine, and using the functionality of the developed module, return the following page as a response:
+//For example:
+//Test	                                        Result
+//console.log(statusCode);                        200
+//console.log(body.includes(data.greeting));      true
+
+// module personalmodule.js
+const currentDate = new Date();
+module.exports.date = currentDate;
+
+module.exports.getMessage = function (name) {
+  const hour = currentDate.getHours();
+
+  switch (true) {
+    case hour >= 5 && hour < 12:
+      return `Good morning, ${name}`;
+    case hour >= 12 && hour < 18:
+      return `Good afternoon, ${name}`;
+    case hour >= 18 && hour < 23:
+      return `Good evening, ${name}`;
+    case hour >= 23 || hour < 5:
+      return `Good night, ${name}`;
+  }
+};
+
+// ---- main module
+const http = require("http");
+const greeting = require("./personalmodule");
+const os = require("os");
+
+const server = http.createServer(function (req, res) {
+  res.writeHead(200, { "Content-Type": "text/html" });
+
+  const userName = os.userInfo().username;
+
+  res.write(`Date of request: ${greeting.date}<br>`);
+  res.write(greeting.getMessage(userName));
+
+  res.end();
+});
+
+server.listen(8000);
