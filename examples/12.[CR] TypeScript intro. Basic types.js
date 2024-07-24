@@ -177,3 +177,98 @@ console.log(processData([])); // "Empty array: []"
 //-Інакше використовує map для обчислення квадратів кожного елемента масиву.
 //6.Обробка помилок: Включає загальну помилку для несумісних типів, хоча в цьому випадку передбачені типи обробляються.
 //Цю функцію можна використовувати з різними типами параметрів, щоб перевірити, як вона обробляє і повертає відповідні результати.
+
+//////////////////////### 3 ###////////////////////////////////////
+//Implement a TypeScript function getFigureInfo() that takes a union type parameter representing different geometric figures: triangle, rectangle, and circle.
+//Each figure should be defined as a special type with certain properties:
+//A triangle must have base and height properties.
+//A rectangle must have width and height properties.
+//A circle must have a radius property.
+//The function getFigureInfo() should return a string with a description of the figure and its defined area.
+//For a triangle, the function should return `Triangle with base figure_base and height figure_height has an area of ​​triangle_area`;
+//For a rectangle, the function should return `Rectangle with width figure_width and height figure_height has an area of ​​rectangle_area`;
+//For a circle, the function should return `Circle with radius figure_radius has an area of ​​circle_area`. For a circle, the area is determined with an accuracy of 2 decimal places.
+//Example of usage:
+//-  const triangle: Triangle = { type: "triangle", base: 5, height: 10 };
+//-  const rectangle: Rectangle = { type: "rectangle", width: 8, height: 14 };
+//-  const circle: Circle = { type: "circle", radius: 8 };
+
+console.log(getFigureInfo(triangle));
+// Output: " Triangle with base 5 and height 10 has an area of 25"
+
+console.log(getFigureInfo(rectangle));
+// Output: " Rectangle with width 8 and height 14 has an area of 112"
+
+console.log(getFigureInfo(circle));
+// Output: " Circle with radius 8 has an area of 201.06"
+
+// Оголошення типів для різних геометричних фігур
+type Triangle = {
+  type: "triangle",
+  base: number,
+  height: number,
+};
+
+type Rectangle = {
+  type: "rectangle",
+  width: number,
+  height: number,
+};
+
+type Circle = {
+  type: "circle",
+  radius: number,
+};
+
+// Оголошення об'єднаного типу для фігур
+type Figure = Triangle | Rectangle | Circle;
+
+// Функція для обчислення площі та формування опису фігури
+function getFigureInfo(figure: Figure): string {
+  switch (figure.type) {
+    case "triangle":
+      // Обчислення площі трикутника
+      const triangleArea = (figure.base * figure.height) / 2;
+      return `Triangle with base ${figure.base} and height ${figure.height} has an area of ${triangleArea}`;
+
+    case "rectangle":
+      // Обчислення площі прямокутника
+      const rectangleArea = figure.width * figure.height;
+      return `Rectangle with width ${figure.width} and height ${figure.height} has an area of ${rectangleArea}`;
+
+    case "circle":
+      // Обчислення площі кола (з точністю до 2 знаків після коми)
+      const circleArea = Math.PI * Math.pow(figure.radius, 2);
+      return `Circle with radius ${
+        figure.radius
+      } has an area of ${circleArea.toFixed(2)}`;
+
+    default:
+      // Обробка непередбачених типів
+      throw new Error("Unknown figure type");
+  }
+}
+
+// Приклади використання
+const triangle: Triangle = { type: "triangle", base: 5, height: 10 };
+const rectangle: Rectangle = { type: "rectangle", width: 8, height: 14 };
+const circle: Circle = { type: "circle", radius: 8 };
+
+console.log(getFigureInfo(triangle));
+// Виведе: "Triangle with base 5 and height 10 has an area of 25"
+
+console.log(getFigureInfo(rectangle));
+// Виведе: "Rectangle with width 8 and height 14 has an area of 112"
+
+console.log(getFigureInfo(circle));
+// Виведе: "Circle with radius 8 has an area of 201.06"
+
+//Пояснення:
+//1.Типи для фігур: Оголошено три типи для трикутника, прямокутника та кола, кожен з яких має відповідні властивості.
+//2.Об'єднаний тип: Figure використовується для опису будь-якої з фігур.
+//3.Функція getFigureInfo():
+//-Triangle: Розраховує площу трикутника як base * height / 2.
+//-Rectangle: Розраховує площу прямокутника як width * height.
+//4.Circle: Розраховує площу кола як Math.PI * radius^2 і використовує toFixed(2) для точності до двох знаків після коми.
+//5.Обробка невідомих типів: Якщо тип фігури не відповідає жодному з відомих, функція викине помилку.
+//Цю функцію можна використовувати для отримання інформації про різні геометричні фігури та їх площу.
