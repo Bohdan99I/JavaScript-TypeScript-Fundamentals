@@ -101,3 +101,109 @@ console.log(item.statusName); // "Delivered"
 //-Інтерфейс Parcel містить всі вказані властивості, включаючи метод deliver та геттер statusName.
 //-Приклад використання створює об'єкт item, змінює його статус за допомогою методу deliver, і виводить новий статус через геттер statusName.
 
+//////////////////////### 3 ###////////////////////////////////////
+
+//Create classes that simulate a basic user management system with a user and an admin.
+//There is an abstract class User with the following members:
+//-id - unique integer number that starts from 1000 and increments for each user instance; cannot be changed after initialization
+//-email - user's email address
+//-password - user's password, only accessible inside this class
+//-passwordPreview - getter for the password
+//-changePassword - method that takes a new password and sets it to the class, only accessible inside this and derived classes
+//-showProfile - empty method that must be implemented in derived classes
+//The user password must contain at least 6 characters; otherwise, show the message: "Password too short!".
+//The passwordPreview getter returns the password but shows only the first and the last characters, with all the other characters replaced by the '•' character. For example: "Qwerty" would be displayed as "Q****y".
+//There is also a class Admin that extends the User class and implements the Printable interface.
+//This class has isActive boolean property and realises the showProfile method, which logs a URL address to the console depending on the active status:
+//-active: "https://softserve/profile/{user_id}"
+//-inactive: "https://softserve/login"
+//The Printable interface has a print method that is used to display the class name in the console.
+//For example:
+//Test	Result               const admin = new Admin('admin@gmail.com', 'Qwerty');
+//admin.changePassword('Weak');
+//console.log(admin.passwordPreview);
+//admin.changePassword('Super-Pass');
+//console.log(admin.passwordPreview);
+//Password too short!
+//Q••••y
+//S••••••••s
+
+
+interface Printable {
+    print(): void;
+}
+
+abstract class User {
+    private static idCounter: number = 1000;
+    public readonly id: number;
+    public email: string;
+    private password: string;
+
+    constructor(email: string, password: string) {
+        this.id = User.idCounter++;
+        this.email = email;
+        if (password.length < 6) {
+            console.log("Password too short!");
+            this.password = "default";
+        } else {
+            this.password = password;
+        }
+    }
+
+    get passwordPreview(): string {
+        let mask = '';
+        for (let i = 0; i < this.password.length - 2; i++) {
+            mask += '•';
+        }
+        return this.password.charAt(0) + mask + this.password.charAt(this.password.length - 1);
+    }
+
+    protected changePassword(newPassword: string): void {
+        if (newPassword.length < 6) {
+            console.log("Password too short!");
+        } else {
+            this.password = newPassword;
+        }
+    }
+
+    abstract showProfile(): void;
+}
+
+class Admin extends User implements Printable {
+    public isActive: boolean;
+
+    constructor(email: string, password: string) {
+        super(email, password);
+        this.isActive = true; // За замовчуванням, адмін активний
+    }
+
+    showProfile(): void {
+        if (this.isActive) {
+            console.log(`https://softserve/profile/${this.id}`);
+        } else {
+            console.log(`https://softserve/login`);
+        }
+    }
+
+    public updatePassword(newPassword: string): void {
+        this.changePassword(newPassword);
+    }
+
+    print(): void {
+        console.log("Admin");
+    }
+}
+
+// Приклад використання:
+const admin = new Admin('admin@gmail.com', 'Qwerty');
+
+admin.updatePassword('Weak');
+console.log(admin.passwordPreview); // Має вивести "Password too short!" і "Q••••y"
+
+admin.updatePassword('Super-Pass');
+console.log(admin.passwordPreview); // Має вивести "S••••••••s"
+
+admin.showProfile(); // Має вивести "https://softserve/profile/1001"
+admin.isActive = false;
+admin.showProfile(); // Має вивести "https://softserve/login"
+admin.print(); // Має вивести "Admin"
