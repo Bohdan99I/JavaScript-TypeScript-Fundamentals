@@ -115,3 +115,26 @@ console.log(identity(books)); // Виведе: 4.3
 //3.Функція reduce використовується для обчислення загальної суми рейтингів.
 //4.Середнє значення обчислюється як загальна сума рейтингів, поділена на кількість елементів у масиві.
 //Таким чином, функція identity приймає масив об'єктів із полем rating і повертає середнє значення рейтингів у масиві.
+
+//////////////////////### 3 ###////////////////////////////////////
+//Create a decorator withEmploymentDate that adds a field employmentDate with value 2024-04-12 to a class it is used with.
+//Use the created decorator with Manager class.
+
+function withEmploymentDate<T extends { new(...args: any[]): {} }>(constructor: T) {
+    return class extends constructor {
+        employmentDate = new Date('2024-04-12');
+    };
+}
+
+@withEmploymentDate
+class Manager {
+    task: string = 'Simple task';
+    project: string = 'Simple project';
+
+    constructor() {
+        console.log('Initializing the Manager class');
+    }
+}
+
+const manager = new Manager();
+console.log(manager);
