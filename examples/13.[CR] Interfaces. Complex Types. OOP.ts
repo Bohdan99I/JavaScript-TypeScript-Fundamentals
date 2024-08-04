@@ -8,14 +8,14 @@ type SortDirection = "asc" | "desc";
 type SortFunction = (array: string[], direction: SortDirection) => string[];
 
 const superSort: SortFunction = (array, direction) => {
-  const sortedArray = [...array].sort((a, b) => {
-    if (direction === "asc") {
-      return a.localeCompare(b);
-    } else {
-      return b.localeCompare(a);
-    }
-  });
-  return sortedArray;
+    const sortedArray = [...array].sort((a, b) => {
+        if (direction === "asc") {
+            return a.localeCompare(b);
+        } else {
+            return b.localeCompare(a);
+        }
+    });
+    return sortedArray;
 };
 
 // Приклад використання:
